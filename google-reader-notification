@@ -129,7 +129,7 @@ class FeedIcon(gtk.StatusIcon):
 
 
 class GoogleReaderIcon(FeedIcon):
-	icon_file = 'Feed-icon.svg'
+	icon_file = 'icon.svg'
 	def __init__(self, username, password):
 		super(GoogleReaderIcon, self).__init__(self.icon_file)
 		auth = libgreader.ClientAuth(username, password)
