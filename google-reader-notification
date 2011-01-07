@@ -9,8 +9,6 @@ import gobject
 import rsvg
 import Image
 
-from login import *
-
 def convert_format(data, width, height, in_format, out_format):
 	# PIL uses big-endian as well
 	img = Image.frombuffer(
@@ -74,8 +72,8 @@ class FeedIcon(gtk.StatusIcon):
 		self.svg_handle = rsvg.Handle(file = background_file)
 
 	def on_size_changed(self, status_icon, size, statusicon):
-		self.size = size	
-		
+		self.size = size
+
 		# create new pixbuf with correct size
 		self.redraw()
 
@@ -160,7 +158,15 @@ class GoogleReaderIcon(FeedIcon):
 
 
 if '__main__' == __name__:
-	icon = GoogleReaderIcon(username, password)
+	# load data from config file (FIXME: use GUI,
+	# gconf and gnome keyring)
+	import os
+	import yaml
+
+	with file(os.path.expanduser('~/.google-reader-notification')) as f:
+		config = yaml.safe_load(f)
+
+	icon = GoogleReaderIcon(config['username'], config['password'])
 	icon.set_update_interval(5*60)
-	
+
 	gtk.main()
