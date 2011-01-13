@@ -1,18 +1,96 @@
-<?xml version="1.0"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"> 
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="128px" height="128px" id="RSSicon" viewBox="0 0 256 256">
-<defs>
-<linearGradient x1="0.085" y1="0.085" x2="0.915" y2="0.915" id="RSSg">
-<stop  offset="0.0" stop-color="#E3702D"/><stop  offset="0.1071" stop-color="#EA7D31"/>
-<stop  offset="0.3503" stop-color="#F69537"/><stop  offset="0.5" stop-color="#FB9E3A"/>
-<stop  offset="0.7016" stop-color="#EA7C31"/><stop  offset="0.8866" stop-color="#DE642B"/>
-<stop  offset="1.0" stop-color="#D95B29"/>
-</linearGradient>
-</defs>
-<rect width="256" height="256" rx="55" ry="55" x="0"  y="0"  fill="#CC5D15"/>
-<rect width="246" height="246" rx="50" ry="50" x="5"  y="5"  fill="#F49C52"/>
-<rect width="236" height="236" rx="47" ry="47" x="10" y="10" fill="url(#RSSg)"/>
-<circle cx="68" cy="189" r="24" fill="#FFF"/>
-<path d="M160 213h-34a82 82 0 0 0 -82 -82v-34a116 116 0 0 1 116 116z" fill="#FFF"/>
-<path d="M184 213A140 140 0 0 0 44 73 V 38a175 175 0 0 1 175 175z" fill="#FFF"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="24"
+   height="24"
+   id="svg2">
+  <defs
+     id="defs4">
+    <mask
+       id="mask3861">
+      <rect
+         width="36.000034"
+         height="36.000034"
+         rx="4.0000172"
+         ry="4.0000172"
+         x="5.9999824"
+         y="5.9999828"
+         id="rect3863"
+         style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.99999988;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    </mask>
+    <mask
+       id="mask3951">
+      <rect
+         width="36.000034"
+         height="36.000034"
+         rx="4.0000172"
+         ry="4.0000172"
+         x="5.9999824"
+         y="5.9999828"
+         id="rect3953"
+         style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.99999988;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    </mask>
+    <mask
+       id="mask3996">
+      <rect
+         width="36.000034"
+         height="36.000034"
+         rx="4.0000172"
+         ry="4.0000172"
+         x="5.9999657"
+         y="1010.3622"
+         id="rect3998"
+         style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.99999988;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    </mask>
+  </defs>
+  <g
+     transform="translate(-145.99997,-1026.3621)"
+     id="layer1">
+    <rect
+       width="17.501156"
+       height="17.501156"
+       rx="0.49902231"
+       ry="0.49902231"
+       x="149.22969"
+       y="1029.6313"
+       id="rect3912"
+       style="color:#000000;fill:none;stroke:#f57900;stroke-width:0.49901369;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <rect
+       width="20.958591"
+       height="20.958591"
+       rx="3.4931042"
+       ry="3.4931042"
+       x="147.50099"
+       y="1027.9023"
+       id="rect3914"
+       style="color:#000000;fill:#f57900;fill-opacity:1;fill-rule:nonzero;stroke:#823b00;stroke-width:0.99802727;stroke-opacity:0.99038463;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       d="m 6,-5 c -25.957379,0 -47,21.042621 -47,47 0,25.957379 21.042621,47 47,47 C 31.957379,89 53,67.957379 53,42 53,16.042621 31.957379,-5 6,-5 z m 0,4 C 29.748247,-1 49,18.251753 49,42 49,65.748247 29.748247,85 6,85 -17.748247,85 -37,65.748247 -37,42 -37,18.251753 -17.748247,-1 6,-1 z M 6,5 C -14.434532,5 -31,21.565468 -31,42 -31,62.434532 -14.434532,79 6,79 26.434532,79 43,62.434532 43,42 43,21.565468 26.434532,5 6,5 z M 6,9 C 24.2254,9 39,23.7746 39,42 39,60.2254 24.2254,75 6,75 -12.2254,75 -27,60.2254 -27,42 -27,23.7746 -12.2254,9 6,9 z m 0,6 C -8.9116891,15 -21,27.088311 -21,42 -21,56.911689 -8.9116891,69 6,69 20.911689,69 33,56.911689 33,42 33,27.088311 20.911689,15 6,15 z"
+       transform="matrix(0.49901366,0,0,0.49901366,146.00399,1026.4055)"
+       mask="url(#mask3861)"
+       id="path3916"
+       style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:1;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <rect
+       width="18.962553"
+       height="18.962553"
+       rx="2.4950769"
+       ry="2.4950769"
+       x="148.49898"
+       y="1028.9005"
+       id="rect3918"
+       style="color:#000000;fill:none;stroke:#fba21f;stroke-width:0.99802738;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <text
+       x="149.49707"
+       y="1046.3661"
+       id="rss_number"
+       xml:space="preserve"
+       style="font-size:9.48125839px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans Mono;-inkscape-font-specification:Bitstream Vera Sans Mono"><tspan
+         x="149.49707"
+         y="1046.3661"
+         id="tspan3922">35</tspan></text>
+  </g>
 </svg>
