@@ -69,7 +69,8 @@ class FeedIcon(gtk.StatusIcon):
 		self.connect('size-changed', self.on_size_changed, None)
 
 		# load background
-		self.svg_handle = rsvg.Handle(file = background_file)
+		with file(background_file) as f:
+			self.icon_code = f.read()
 
 	def on_size_changed(self, status_icon, size, statusicon):
 		self.size = size
@@ -85,39 +86,21 @@ class FeedIcon(gtk.StatusIcon):
 		cr = cairo.Context(surface)
 		cr.scale(self.size, self.size)
 
-		# leave a little room
-		cr.scale(0.8, 0.8)
-		cr.translate(0.1, 0.1)
+		# adjust icon
+		icon_str = ""
+		if self.unread_count:
+			if self.unread_count > 99:
+				icon_str = '99+'
+			else:
+				icon_str = str(self.unread_count)
+		new_icon_code = self.icon_code % {'rss_number': icon_str}
+		svg_handle = rsvg.Handle(data = new_icon_code)
 
 		# render background
 		cr.save()
-		cr.scale(1./self.svg_handle.get_property('width'), 1./self.svg_handle.get_property('height'))
-		self.svg_handle.render_cairo(cr)
+		cr.scale(1./svg_handle.get_property('width'), 1./svg_handle.get_property('height'))
+		svg_handle.render_cairo(cr)
 		cr.restore()
-
-		# draw on top if there are new items
-		if self.unread_count:
-			cr.set_source_rgba(0, 0, 0.8, 0.7)
-
-			# c_x, c_y is the circle center
-			c_x = 0.6
-			c_y = 0.6
-			radius = 0.38
-
-			cr.arc(c_x, c_y, radius, 0, math.pi*2)
-			cr.fill()
-
-			# assume each number is about square
-			text = str(self.unread_count)
-			if len(text) > 2: text = '+'
-			cr.set_font_size(radius*1.7/len(text))
-			cr.select_font_face("Ubuntu", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
-
-			x_bearing, y_bearing, width, height, x_advance, y_advance = cr.text_extents(text)
-			cr.move_to(c_x-width/2, c_y+height/2)
-
-			cr.set_source_rgb(1, 1, 1)
-			cr.show_text(text)
 
 		# fetch
 		pixbuf = pixbuf_from_surface(surface)
@@ -128,11 +111,31 @@ class FeedIcon(gtk.StatusIcon):
 
 class GoogleReaderIcon(FeedIcon):
 	icon_file = 'icon.svg'
-	def __init__(self, username, password):
+	def __init__(self, glade_file, username, password):
 		super(GoogleReaderIcon, self).__init__(self.icon_file)
 		auth = libgreader.ClientAuth(username, password)
 		self.reader = libgreader.GoogleReader(auth)
 		self.timeout_source = None
+		builder = gtk.Builder()
+		builder.add_from_file(glade_file)
+
+		self.menu = builder.get_object('tray_menu')
+		self.preferences_dialog = builder.get_object('preferences_dialog')
+
+		self.connect('popup-menu', self.on_popup_menu)
+
+		preferences_action = builder.get_object('a_open_preferences')
+		preferences_action.connect('activate', self.on_open_preferences)
+
+	def on_popup_menu(self, status_icon, button, activate_time):
+		self.menu.popup(None, None, None, button, activate_time)
+
+	def on_open_preferences(self, *args):
+
+		if self.preferences_dialog.run():
+			# save new data
+			pass
+		self.preferences_dialog.hide()
 
 	@property
 	def unread_count(self):
@@ -163,10 +166,13 @@ if '__main__' == __name__:
 	import os
 	import yaml
 
+	glade_file = 'google-reader-notification.glade'
+	gobject.set_application_name('google-reader-notification')
+
 	with file(os.path.expanduser('~/.google-reader-notification')) as f:
 		config = yaml.safe_load(f)
 
-	icon = GoogleReaderIcon(config['username'], config['password'])
+	icon = GoogleReaderIcon(glade_file, config['username'], config['password'])
 	icon.set_update_interval(5*60)
 
 	gtk.main()
