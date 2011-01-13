@@ -91,6 +91,6 @@
        style="font-size:9.48125839px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans Mono;-inkscape-font-specification:Bitstream Vera Sans Mono"><tspan
          x="149.49707"
          y="1046.3661"
-         id="tspan3922">35</tspan></text>
+         id="tspan3922">%(rss_number)s</tspan></text>
   </g>
 </svg>
