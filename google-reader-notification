@@ -9,6 +9,8 @@ import gobject
 import rsvg
 import Image
 
+import gnomekeyring
+
 def convert_format(data, width, height, in_format, out_format):
 	# PIL uses big-endian as well
 	img = Image.frombuffer(
@@ -111,10 +113,14 @@ class FeedIcon(gtk.StatusIcon):
 
 class GoogleReaderIcon(FeedIcon):
 	icon_file = 'icon.svg'
-	def __init__(self, glade_file, username, password):
+	keyring_attrs = {
+		'protocol': 'Google Reader',
+	}
+
+	def __init__(self, glade_file):
 		super(GoogleReaderIcon, self).__init__(self.icon_file)
-		auth = libgreader.ClientAuth(username, password)
-		self.reader = libgreader.GoogleReader(auth)
+		self.init_reader()
+
 		self.timeout_source = None
 		builder = gtk.Builder()
 		builder.add_from_file(glade_file)
@@ -127,28 +133,71 @@ class GoogleReaderIcon(FeedIcon):
 		preferences_action = builder.get_object('a_open_preferences')
 		preferences_action.connect('activate', self.on_open_preferences)
 
+		self.preferences_username = builder.get_object('tx_username')
+		self.preferences_password = builder.get_object('tx_password')
+
+	def init_reader(self):
+		try:
+			username, password = self.read_username_password()
+			auth = libgreader.ClientAuth(username, password)
+			self.reader = libgreader.GoogleReader(auth)
+		except gnomekeyring.NoMatchError:
+			# no credentials entered
+			self.reader = None
+
 	def on_popup_menu(self, status_icon, button, activate_time):
 		self.menu.popup(None, None, None, button, activate_time)
 
 	def on_open_preferences(self, *args):
-
 		if self.preferences_dialog.run():
 			# save new data
-			pass
+			username = self.preferences_username.get_text()
+			password = self.preferences_password.get_text()
+
+			assert gnomekeyring.is_available()
+			keyring = gnomekeyring.get_default_keyring_sync()
+
+			# remove all previous instances
+			try:
+				for item in gnomekeyring.find_items_sync(gnomekeyring.ITEM_NETWORK_PASSWORD, self.keyring_attrs):
+					gnomekeyring.item_delete_sync(item.keyring, item.item_id)
+			except gnomekeyring.NoMatchError:
+				pass
+
+			attrs = self.keyring_attrs.copy()
+			attrs['username'] = username
+			gnomekeyring.item_create_sync(keyring, gnomekeyring.ITEM_NETWORK_PASSWORD, 'Google Reader', attrs, password, True)
+
+			# update
+			self.init_reader()
+			self.redraw()
+
 		self.preferences_dialog.hide()
+
+	def read_username_password(self):
+			keyring = gnomekeyring.get_default_keyring_sync()
+			items = gnomekeyring.find_items_sync(gnomekeyring.ITEM_NETWORK_PASSWORD, self.keyring_attrs)
+			assert(1 == len(items))
+
+			return items[0].attributes['username'], items[0].secret
+
 
 	@property
 	def unread_count(self):
-		self.update()
-		return self._unread_count
+		if self.reader:
+			self.update()
+			return self._unread_count
+		else:
+			return None
 
 	@unread_count.setter
 	def unread_count(self, val):
 		self._unread_count = val
 
 	def update(self):
-		self.reader.buildSubscriptionList()
-		self._unread_count = sum( feed.unread for feed in self.reader.feeds if feed.unread )
+		if self.reader:
+			self.reader.buildSubscriptionList()
+			self._unread_count = sum( feed.unread for feed in self.reader.feeds if feed.unread )
 
 	def set_update_interval(self, seconds):
 		def call_update():
@@ -169,10 +218,7 @@ if '__main__' == __name__:
 	glade_file = 'google-reader-notification.glade'
 	gobject.set_application_name('google-reader-notification')
 
-	with file(os.path.expanduser('~/.google-reader-notification')) as f:
-		config = yaml.safe_load(f)
-
-	icon = GoogleReaderIcon(glade_file, config['username'], config['password'])
+	icon = GoogleReaderIcon(glade_file)
 	icon.set_update_interval(5*60)
 
 	gtk.main()
