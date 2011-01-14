@@ -237,7 +237,7 @@ if '__main__' == __name__:
 	import os
 	import yaml
 
-	glade_file = app_name + '.glade'
+	glade_file = get_resource(app_name + '.glade')
 	gobject.set_application_name(app_name)
 
 	icon = GoogleReaderIcon(glade_file)
