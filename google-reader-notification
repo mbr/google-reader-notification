@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import subprocess
 
 import libgreader
 import cairo
@@ -75,6 +76,7 @@ class FeedIcon(gtk.StatusIcon):
 		super(FeedIcon, self).__init__(*args, **kwargs)
 		self.unread_count = 0
 		self.connect('size-changed', self.on_size_changed, None)
+		self.connect('activate', self.on_activate, None)
 
 		# load background
 		with file(background_file) as f:
@@ -85,6 +87,9 @@ class FeedIcon(gtk.StatusIcon):
 
 		# create new pixbuf with correct size
 		self.redraw()
+
+	def on_activate(self, icon, data):
+		pass
 
 	def redraw(self):
 		# create new cairo surface
@@ -169,6 +174,11 @@ class GoogleReaderIcon(FeedIcon):
 		else:
 			# inactive, remove startup if it exists
 			if os.path.exists(self.startup_file): os.unlink(self.startup_file)
+
+	def on_activate(self, icon, data):
+		# open chromium
+		command = ['chromium-browser', '--app=https://www.google.com/reader']
+		subprocess.Popen(command)
 
 	def on_open_preferences(self, *args):
 		if self.preferences_dialog.run():
