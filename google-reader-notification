@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import math
+import os
 
 import libgreader
 import cairo
@@ -10,6 +10,8 @@ import rsvg
 import Image
 
 import gnomekeyring
+
+app_name = 'google-reader-notification'
 
 def convert_format(data, width, height, in_format, out_format):
 	# PIL uses big-endian as well
@@ -24,6 +26,10 @@ def convert_format(data, width, height, in_format, out_format):
 	)
 
 	return img.tostring('raw', out_format, 0, 1)
+
+
+def get_resource(name):
+	return os.path.join(os.path.dirname(__file__), name)
 
 
 def pixbuf_from_surface(surface):
@@ -112,10 +118,11 @@ class FeedIcon(gtk.StatusIcon):
 
 
 class GoogleReaderIcon(FeedIcon):
-	icon_file = 'icon.svg'
+	icon_file = get_resource('icon.svg')
 	keyring_attrs = {
 		'protocol': 'Google Reader',
 	}
+	startup_file = os.path.join(os.path.expanduser('~'), '.config', 'autostart', app_name + '.desktop')
 
 	def __init__(self, glade_file):
 		super(GoogleReaderIcon, self).__init__(self.icon_file)
@@ -136,6 +143,10 @@ class GoogleReaderIcon(FeedIcon):
 		self.preferences_username = builder.get_object('tx_username')
 		self.preferences_password = builder.get_object('tx_password')
 
+		self.menuitem_startup = builder.get_object('mn_startup')
+		self.menuitem_startup.set_active(os.path.exists(self.startup_file))
+		self.menuitem_startup.connect('toggled', self.on_menuitem_startup_toggled)
+
 	def init_reader(self):
 		try:
 			username, password = self.read_username_password()
@@ -147,6 +158,17 @@ class GoogleReaderIcon(FeedIcon):
 
 	def on_popup_menu(self, status_icon, button, activate_time):
 		self.menu.popup(None, None, None, button, activate_time)
+
+	def on_menuitem_startup_toggled(self, menuitem):
+		if menuitem.get_active():
+			data = file(get_resource(app_name + '.desktop')).read()
+			data %= {'exec': os.path.abspath(__file__)}
+			# active, make sure startup works
+			with file(self.startup_file, 'w') as out:
+				out.write(data)
+		else:
+			# inactive, remove startup if it exists
+			if os.path.exists(self.startup_file): os.unlink(self.startup_file)
 
 	def on_open_preferences(self, *args):
 		if self.preferences_dialog.run():
@@ -215,8 +237,8 @@ if '__main__' == __name__:
 	import os
 	import yaml
 
-	glade_file = 'google-reader-notification.glade'
-	gobject.set_application_name('google-reader-notification')
+	glade_file = app_name + '.glade'
+	gobject.set_application_name(app_name)
 
 	icon = GoogleReaderIcon(glade_file)
 	icon.set_update_interval(5*60)
