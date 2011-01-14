@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Exec=%(exec)s
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=Google Reader Notification
+Comment=Notifies you about updates in your Google Reader account
