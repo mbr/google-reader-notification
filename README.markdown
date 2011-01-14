@@ -9,6 +9,18 @@ Icon (in file "icon.svg") created by Alexander Metz, licensed under the [Create 
 
 All other program code is subject to the following license
 
+Installation
+============
+Currently, there's no nice installation method for this package. On Ubuntu, you can
+
+  $ sudo apt-get install python-stdeb
+
+and then
+
+  $ pypi-install libgreader
+
+to install the prerequisites in a nice way.
+
 License
 =======
 Copyright (c) 2010 Marc Brinkmann
